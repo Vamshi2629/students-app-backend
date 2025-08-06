@@ -98,3 +98,23 @@ exports.deleteSubjectDocument = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+// Delete subject by ID (row-level deletion)
+exports.deleteSubjectById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Check if the subject exists
+    const check = await db.query("SELECT * FROM subjects WHERE id = $1", [id]);
+    if (check.rows.length === 0) {
+      return res.status(404).json({ message: "Subject not found" });
+    }
+
+    // Optionally clear associated Cloudinary fields
+    await db.query("DELETE FROM subjects WHERE id = $1", [id]);
+
+    res.json({ message: "Subject deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting subject by ID:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

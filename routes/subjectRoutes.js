@@ -17,5 +17,6 @@ router.get("/:id/document", subjectController.getSubjectDocument);
 
 // Delete subject document from Cloudinary
 router.delete("/:id/document", subjectController.deleteSubjectDocument);
+router.delete("/:id", subjectController.deleteSubjectById);
 
 module.exports = router;
