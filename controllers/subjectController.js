@@ -1,17 +1,26 @@
 const db = require("../config/db");
 
 exports.createSubject = async (req, res) => {
-  const { subject_name, class_name, pdf_url, cloudinary_public_id } = req.body;
+  const {
+    subject_name,
+    class_name,
+    pdf_url,
+    cloudinary_public_id,
+    user_id, // ✅ Include user_id from request body
+  } = req.body;
 
   if (!pdf_url || !cloudinary_public_id) {
-    return res.status(400).json({ error: "PDF URL and Cloudinary public ID are required" });
+    return res.status(400).json({
+      error: "PDF URL and Cloudinary public ID are required",
+    });
   }
 
   try {
     const result = await db.query(
-      `INSERT INTO subjects (subject_name, class_name, pdf_url, cloudinary_public_id)
-       VALUES ($1, $2, $3, $4) RETURNING *`,
-      [subject_name, class_name, pdf_url, cloudinary_public_id]
+      `INSERT INTO subjects 
+       (subject_name, class_name, pdf_url, cloudinary_public_id, user_id)
+       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [subject_name, class_name, pdf_url, cloudinary_public_id, user_id] // ✅ Pass user_id
     );
 
     res.status(201).json(result.rows[0]);
@@ -20,6 +29,7 @@ exports.createSubject = async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 };
+
 
 
 exports.getAllSubjects = async (req, res) => {
