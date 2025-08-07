@@ -12,7 +12,7 @@ router.get("/", subjectController.getAllSubjects);
 // Get subject by ID
 router.get("/:id", subjectController.getSubjectById);
 // getSubjectsByUserId
-router.get("/user/:id", subjectController.getSubjectsByUserId);
+router.get("/user/:userId", subjectController.getSubjectsByUserId);
 
 // Get subject document from Cloudinary
 router.get("/:id/document", subjectController.getSubjectDocument);
