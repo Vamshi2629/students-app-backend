@@ -128,3 +128,20 @@ exports.deleteSubjectById = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+// Get all subjects by user ID
+exports.getSubjectsByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const result = await db.query(
+      "SELECT * FROM subjects WHERE user_id = $1 ORDER BY created_at DESC",
+      [userId]
+    );
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching subjects by user ID:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
